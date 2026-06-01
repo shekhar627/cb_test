@@ -1,0 +1,81 @@
+﻿name: Build and deploy demo web to ECS
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ap-northeast-1
+  ECR_REPOSITORY: clinic-board/frontend
+  ECS_CLUSTER: clinic-board-prod-cluster
+  ECS_SERVICE: clinic-board-prod-demo
+  CONTAINER_NAME: demo
+  TASK_FAMILY: clinic-board-prod-demo
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" .
+          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          docker tag "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" "$ECR_REGISTRY/$ECR_REPOSITORY:latest"
+          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:latest"
+
+      - name: Register new task definition revision
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          aws ecs describe-task-definition --task-definition "$TASK_FAMILY" --query taskDefinition > taskdef.json
+          python - <<'PY'
+          import json, os
+          with open("taskdef.json","r",encoding="utf-8") as f:
+            td = json.load(f)
+          for k in ["status","revision","taskDefinitionArn","requiresAttributes","compatibilities","registeredAt","registeredBy"]:
+            td.pop(k, None)
+          image = f'{os.environ["ECR_REGISTRY"]}/{os.environ["ECR_REPOSITORY"]}:{os.environ["IMAGE_TAG"]}'
+          for c in td.get("containerDefinitions", []):
+            if c.get("name") == os.environ["CONTAINER_NAME"]:
+              c["image"] = image
+          with open("taskdef.register.json","w",encoding="utf-8") as f:
+            json.dump(td, f)
+          PY
+          aws ecs register-task-definition --cli-input-json file://taskdef.register.json > new-taskdef.json
+          TASK_DEF_ARN=$(python - <<'PY'
+          import json
+          with open("new-taskdef.json","r",encoding="utf-8") as f:
+            print(json.load(f)["taskDefinition"]["taskDefinitionArn"])
+          PY
+          )
+          echo "TASK_DEF_ARN=$TASK_DEF_ARN" >> $GITHUB_ENV
+
+      - name: Deploy to ECS
+        run: |
+          aws ecs update-service \
+            --cluster "$ECS_CLUSTER" \
+            --service "$ECS_SERVICE" \
+            --task-definition "$TASK_DEF_ARN" \
+            --force-new-deployment
