@@ -1,0 +1,253 @@
+:root {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #f7f0e8;
+  background:
+    radial-gradient(circle at top left, rgba(238, 173, 97, 0.28), transparent 28%),
+    linear-gradient(135deg, #10212b 0%, #183848 45%, #214d43 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button {
+  font: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.shell {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 40px 0 56px;
+}
+
+.hero {
+  padding: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  background: rgba(7, 19, 28, 0.58);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 24px 60px rgba(2, 10, 16, 0.28);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #f2bf7c;
+  font-size: 0.8rem;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  max-width: 11ch;
+  margin-bottom: 16px;
+  font-size: clamp(2.5rem, 5vw, 4.8rem);
+  line-height: 0.95;
+}
+
+.lede {
+  max-width: 56rem;
+  color: rgba(247, 240, 232, 0.84);
+  font-size: 1.05rem;
+}
+
+.actions {
+  margin: 28px 0 18px;
+}
+
+.page-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.primary {
+  padding: 14px 22px;
+  border: 0;
+  border-radius: 999px;
+  color: #10212b;
+  background: linear-gradient(135deg, #f1c58d 0%, #f6e6bf 100%);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.secondary-action {
+  padding: 10px 16px;
+  font-size: 0.92rem;
+}
+
+.primary:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.notice {
+  padding: 14px 16px;
+  border-radius: 16px;
+}
+
+.warning {
+  background: rgba(241, 197, 141, 0.14);
+  color: #ffe2be;
+}
+
+.error {
+  background: rgba(224, 91, 91, 0.14);
+  color: #ffd4d4;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.card,
+.panel {
+  border-radius: 24px;
+  background: rgba(8, 18, 29, 0.66);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card {
+  padding: 22px;
+}
+
+.panel {
+  margin-top: 22px;
+  padding: 24px;
+}
+
+.token-block {
+  margin: 10px 0 18px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(2, 10, 16, 0.5);
+  color: #d7f4ee;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+.token-action-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+
+.field-label {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #f2bf7c;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.token-input {
+  width: 100%;
+  min-height: 220px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  background: rgba(2, 10, 16, 0.45);
+  color: #f7f0e8;
+  font: 0.92rem/1.5 "Consolas", "Courier New", monospace;
+  resize: vertical;
+}
+
+.token-input:focus {
+  outline: 2px solid rgba(242, 191, 124, 0.45);
+  outline-offset: 2px;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(247, 240, 232, 0.88);
+  font-size: 0.92rem;
+}
+
+.status-idle {
+  color: rgba(247, 240, 232, 0.8);
+}
+
+.status-pending {
+  color: #ffe2be;
+  background: rgba(241, 197, 141, 0.14);
+}
+
+.status-success {
+  color: #c9f5d7;
+  background: rgba(61, 153, 97, 0.18);
+}
+
+.status-error {
+  color: #ffd4d4;
+  background: rgba(224, 91, 91, 0.16);
+}
+
+.panel dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 0;
+}
+
+.panel dt {
+  margin-bottom: 6px;
+  color: #f2bf7c;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.panel dd {
+  margin: 0;
+  color: rgba(247, 240, 232, 0.9);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 860px) {
+  .grid,
+  .panel dl {
+    grid-template-columns: 1fr;
+  }
+
+  .hero,
+  .card,
+  .panel {
+    padding: 20px;
+  }
+
+  .shell {
+    width: min(100% - 20px, 1120px);
+    padding-top: 20px;
+  }
+}

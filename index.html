@@ -1,17 +1,13 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Clinic Board Demo</title>
-    <style>
-      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 3rem; line-height: 1.4; }
-      code { background: #f4f4f5; padding: 0.2rem 0.35rem; border-radius: 0.25rem; }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clinic Board Web</title>
+    <script src="/config.js"></script>
   </head>
   <body>
-    <h1>Clinic Board demo page</h1>
-    <p>This page is served from an <code>nginx</code> container on <code>ECS Fargate</code> behind an <code>ALB</code>.</p>
-	<p>This line added to test autometic CI/CD<p>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-﻿name: Build and deploy demo web to ECS
+name: Build and deploy demo web to ECS
 
 on:
   push:
